@@ -1,0 +1,19 @@
+name: issue-commment-workflow
+name:
+  issue_comment:
+    types: [opened]
+
+jobs:
+  pr_comment:
+    if: github.event.issue.pull_request == 'true'
+    runs-on: ubuntu-latest
+    steps:
+    - name: pr comment
+      run: echo pr comment
+
+  issue_comment:
+    if: github.event.issue.pull_request == 'false'
+    runs-on: ubuntu-latest
+    steps:
+    - name: pr comment
+      run: echo pr comment
