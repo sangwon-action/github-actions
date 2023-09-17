@@ -1,5 +1,5 @@
 name: issue-commment-workflow
-name:
+on:
   issue_comment:
     types: [opened]
 
