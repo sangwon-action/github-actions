@@ -1,24 +1,17 @@
+name: issue-comment-workflow
 on: issue_comment
 
 jobs:
-  pr_commented:
-    # This job only runs for pull request comments
-    name: PR comment
+  pr-comment:
     if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo A comment on PR $NUMBER
-        env:
-          NUMBER: ${{ github.event.issue.number }}
+      - name: pr comment
+        run: echo ${{ github.event.issue.pull_request }}
 
-  issue_commented:
-    # This job only runs for issue comments
-    name: Issue comment
+  issue-comment:
     if: ${{ !github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo A comment on issue $NUMBER
-        env:
-          NUMBER: ${{ github.event.issue.number }}
+      - name: issue comment
+        run: echo ${{ github.event.issue.pull_request }}
