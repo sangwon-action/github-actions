@@ -1,0 +1,16 @@
+name: context
+on: workflow_dispatch
+
+jobs:
+  context:
+    runs-on: ubuntu-latest
+    steps:
+    - name: github context
+      run: echo '${{ toJSON(github) }}'
+    - name: job context
+      run: echo '${{ toJSON(job) }}'
+    - name: steps context
+      run: echo '${{ toJSON(steps) }}'
+    - name: runner context
+      run: echo '${{ toJSON(runner) }}'
+    
