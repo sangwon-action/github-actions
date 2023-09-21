@@ -1,0 +1,24 @@
+name: artifact
+on: push
+
+jobs:
+  upload-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo $(expr 3 + 7) > ./artifact-folder/sum.txt
+      - name: Upload sum.txt as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact-test
+          path: ./artifact-folder/sum.txt
+
+  download-artifact:
+    needs: upload-artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact-test
+          path: ./downloaded-folder
+      - run: cat ./downloaded-folder/sum.txt
