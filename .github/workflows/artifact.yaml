@@ -6,14 +6,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: add 3 + 7
-         run: |
-          mkdir artifact-folder
-          echo $(expr 3 + 7) > ./artifact-folder/sum.txt
+        run: |
+          echo $(expr 3 + 7) > sum.txt
       - name: upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: artifact-test
-          path: ./artifact-folder/sum.txt
+          path: ./sum.txt
 
   download-artifact:
     needs: upload-artifact
@@ -23,5 +22,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: artifact-test
-          path: ./downloaded-folder
-      - run: cat ./downloaded-folder/sum.txt
+          path: ./
+      - name: check 
+        run: cat sum.txt
