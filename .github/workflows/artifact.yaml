@@ -5,23 +5,23 @@ jobs:
   upload-artifact:
     runs-on: ubuntu-latest
     steps:
-      - name: add 3 + 7
-        run: |
-          echo $(expr 3 + 7) > sum.txt
-      - name: upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifact-test
-          path: ./sum.txt
+    - name: echo
+      run: |
+        echo hello > hello.txt
+    - name: upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifact-test
+        path: ./hello.txt
 
   download-artifact:
     needs: upload-artifact
     runs-on: ubuntu-latest
     steps:
-      - name: download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: artifact-test
-          path: ./
-      - name: check 
-        run: cat sum.txt
+    - name: download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: artifact-test
+        path: ./
+    - name: check 
+      run: cat hello.txt
