@@ -1,0 +1,9 @@
+name: var-2
+on: push
+
+jobs:
+  var-2:
+    runs-on: ubuntu-latest
+    steps:
+    - name: get env
+      run: echo ${{ vars.LEVEL }}
