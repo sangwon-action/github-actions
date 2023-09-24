@@ -1,14 +1,13 @@
-name: environment
-on: push
+on:
+  workflow_dispatch:
 
 jobs:
-  get-env:
+  display-variables:
     runs-on: ubuntu-latest
     steps:
-    - name: get env & secret
+    - name: Use variables
       run: |
-        echo ${{ vars.LEVEL }}
-        echo ${{ secrets.level }}
-    - name: get env
-      run: |
-        echo ${{ vars.ACTION_TEST }}
+        echo "organization variable : $ORGANIZATION_VAR"
+      env:
+        ORGANIZATION_VAR: ${{ vars.ORGANIZATION_VAR }}
+        
