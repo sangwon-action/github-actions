@@ -7,5 +7,5 @@ jobs:
     steps:
     - name: get env & secret
       run: |
-        echo ${{ vars.level }}
+        echo ${{ vars.LEVEL }}
         echo ${{ secrets.level }}
