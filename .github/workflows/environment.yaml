@@ -8,6 +8,7 @@ jobs:
     - name: Use variables
       run: |
         echo "organization variable : $ORGANIZATION_VAR"
+        echo ${{ vars.ORGANIZATION_VAR }}
       env:
         ORGANIZATION_VAR: ${{ vars.ORGANIZATION_VAR }}
         
