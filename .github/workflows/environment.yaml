@@ -11,4 +11,4 @@ jobs:
         echo ${{ secrets.level }}
     - name: get env
       run: |
-        echo ${{ vars.level2 }}
+        echo ${{ vars.ACTION_TEST }}
