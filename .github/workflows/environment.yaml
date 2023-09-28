@@ -8,7 +8,10 @@ jobs:
     - name: check environment & secret
       run: |
         echo ${{ vars.ACTION_TEST }}
+        echo $ACTION_TEST
         echo ${{ secrets.level }}
+      env:
+        ACTION_TEST: ${{ vars.ACTION_TEST }}
             
   get-env-dev:
     runs-on: ubuntu-latest
