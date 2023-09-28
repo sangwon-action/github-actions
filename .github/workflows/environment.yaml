@@ -9,7 +9,7 @@ jobs:
       run: |
         echo ${{ vars.ACTION_TEST }}
         echo ${{ vars.name }}
-                
+        echo ${{ vars.ORGANIZATION_VAR }}
         echo $ACTION_TEST
         echo ${{ secrets.level }}
       env:
@@ -23,3 +23,4 @@ jobs:
       run: |
         echo ${{ vars.ACTION_TEST }}
         echo ${{ secrets.level }}
+        echo ${{ vars.ORGANIZATION_VAR }}
