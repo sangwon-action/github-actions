@@ -8,6 +8,8 @@ jobs:
     - name: check environment & secret
       run: |
         echo ${{ vars.ORGANIZATION_VAR }}
+        echo ${{ vars.LEVEL }}
+        
             
   get-env-dev:
     runs-on: ubuntu-latest
@@ -16,4 +18,5 @@ jobs:
     - name: check environment & secret
       run: |
         echo ${{ vars.ORGANIZATION_VAR }}
+        echo ${{ vars.LEVEL }}
         echo hello
