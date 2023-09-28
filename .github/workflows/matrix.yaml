@@ -1,21 +1,16 @@
 name: matrix
-on: workflow_dispatch
+on: push
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  get-matrix:
     strategy:
       matrix:
-        version: [3.7, 3.8, 3.9]
+        os: [windows-latest, ubuntu-latest]
+        version: [12,14]
+    runs-on: ${{ matrix.os }}
     steps:
-    - name: checkout
-      uses: actions/checkout@v3
-    - name: setup python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.version }}
-    - name: run python
-      run: python script.py
-
-
-
+    - name: get matrix values
+      run: |
+        echo ${{ matrix.os }}
+        echo ${{ matrix.version }}
+        
