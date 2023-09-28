@@ -9,6 +9,7 @@ jobs:
       run: |
         echo ${{ vars.ORGANIZATION_VAR }}
         echo ${{ vars.LEVEL }}
+        echo ${{ secrets.ACTIONS }}
         
             
   get-env-dev:
@@ -19,4 +20,5 @@ jobs:
       run: |
         echo ${{ vars.ORGANIZATION_VAR }}
         echo ${{ vars.LEVEL }}
+        echo ${{ secrets.ACTIONS }}
         echo hello
