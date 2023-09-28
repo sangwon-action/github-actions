@@ -16,3 +16,4 @@ jobs:
     - name: check environment & secret
       run: |
         echo ${{ vars.ORGANIZATION_VAR }}
+        echo hello
