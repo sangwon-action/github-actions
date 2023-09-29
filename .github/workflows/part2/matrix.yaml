@@ -1,4 +1,4 @@
-name: matrix
+name: matrix 1
 on: push
 
 jobs:
