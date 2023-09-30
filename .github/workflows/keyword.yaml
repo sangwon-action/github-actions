@@ -15,8 +15,8 @@ jobs:
     - name: get keyword
       id: get-keyword
       run: |
-        echo ${{ github.event.issue }}
         echo '${{ toJSON(github.event.issue) }}' 
+        echo ${{ github.event.issue.html_url }}
         echo level=Undefined >> $GITHUB_OUTPUT
 
         keywords=$(cat keyword-list.txt)
@@ -49,7 +49,7 @@ jobs:
                   {
                     "title": "Level : ${{ needs.get-keyword.outputs.level }}",
                     "short": true,
-                    "value": "repository : ${{ github.repository }}"
+                    "value": "issue url : ${{ github.event.issue.html_url }}"
                   }
                 ]
               }
