@@ -1,0 +1,75 @@
+name: create-repo
+on:
+  workflow_dispatch:
+    inputs:
+      prefix:
+        description: 'set repo prefix'
+        required: true
+        default: 'service'
+        type: choice
+        options:
+        - example
+        - service
+      name:
+        description: 'set repo name'
+        required: true
+        default: 'github-actions'
+        type: string
+
+jobs:
+  create-repo-automation:
+    runs-on: ubuntu-latest
+    steps:
+    - name: gh auth login
+      run: |
+        echo ${{ secrets.PERSONAL_ACCESS_TOKEN }} | gh auth login --with-token
+    - name: create-repo
+      id: create-repo
+      run: |
+        gh repo create sangwon-action/${{ inputs.prefix }}-${{ inputs.name }} --public --add-readme
+    - name: slack 
+      if: keyword == 'critical'
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "attachments": [
+              {
+                "pretext": "send message",
+                "color": "28a745",
+                "fields": [
+                  {
+                    "title": "critical",
+                    "short": true,
+                    "value": "critical"
+                  }
+                ]
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.CRITICAL_SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+    - name: slack 
+      if: keyword == 'normal'
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "attachments": [
+              {
+                "pretext": "send message",
+                "color": "28a745",
+                "fields": [
+                  {
+                    "title": "normal",
+                    "short": true,
+                    "value": "normal"
+                  }
+                ]
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.NORMAL_SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
