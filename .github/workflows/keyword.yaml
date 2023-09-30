@@ -17,7 +17,7 @@ jobs:
       run: |
         echo ${{ github.event.issue }}
         echo '${{ toJSON(github.event.issue) }}' 
-        echo level=none >> $GITHUB_OUTPUT
+        echo level=Undefined >> $GITHUB_OUTPUT
 
         keywords=$(cat keyword-list.txt)
         for keyword in $keywords; do
@@ -29,7 +29,7 @@ jobs:
 
   slack:
     needs: [get-keyword]
-    if: needs.get-keyword.outputs.level != "none"
+    if: needs.get-keyword.outputs.level != 'Undefined'
     runs-on: ubuntu-latest
     strategy:
       matrix:
