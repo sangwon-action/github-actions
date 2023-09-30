@@ -10,18 +10,18 @@ jobs:
     if: |
       job level에서 contains사용 
     outputs:
-      keyword: ${{ steps.issue-title.outputs.keyword }}
+      level: ${{ steps.issue-title.outputs.level }}
     steps:
     - name: create output
-      id: issue-title
+      id: keyword
       run: |
-        # 키워드가 critical -> output: critical
-        # 키워드가 normal -> output: normal
+        # 키워드가 critical -> output level=critical
+        # 키워드가 normal -> output level=normal
 
   slack:
     needs: [get-keyword]
     runs-on: ubuntu-latest
-    environment: keyword
+    environment: 아웃풋 level 사용 
     steps:
     - name: slack 
       uses: slackapi/slack-github-action@v1.24.0
