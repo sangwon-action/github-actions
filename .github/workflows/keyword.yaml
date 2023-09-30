@@ -1,4 +1,4 @@
- name: issue-keyword-notify
+name: issue-level-notify
 
 on:
   issues:
@@ -7,27 +7,54 @@ on:
 jobs:
   get-keyword:
     runs-on: ubuntu-latest
-    if: |
-      job level에서 contains사용 
     outputs:
-      level: ${{ steps.issue-title.outputs.level }}
+      level: ${{ steps.get-keyword.outputs.level }}
     steps:
-    - name: create output
-      id: keyword
+    - name: use checkout action
+      uses: actions/checkout@v4
+    - name: get keyword
+      id: get-keyword
       run: |
-        # 키워드가 critical -> output level=critical
-        # 키워드가 normal -> output level=normal
+        echo ${{ github.event.issue }}
+        echo '${{ toJSON(github.event.issue) }}' 
+        echo level=Undefined >> $GITHUB_OUTPUT
+
+        keywords=$(cat keyword-list.txt)
+        for keyword in $keywords; do
+          if [[ "${{ github.event.issue.title }}" =~ "$keyword" ]]; then
+            echo level=$keyword >> $GITHUB_OUTPUT
+          fi
+        done
+
 
   slack:
     needs: [get-keyword]
+    if: needs.get-keyword.outputs.level != Undefined
     runs-on: ubuntu-latest
-    environment: 아웃풋 level 사용 
+    strategy:
+      matrix:
+        environment: ["${{ needs.get-keyword.outputs.level }}"]
+    environment: ${{ matrix.environment }}
     steps:
     - name: slack 
       uses: slackapi/slack-github-action@v1.24.0
       with:
         payload: |
-          # 생략
+          {
+            "attachments": [
+              {
+                "pretext": "slack message",
+                "color": "28a745",
+                "fields": [
+                  {
+                    "title": "Level : ${{ needs.get-keyword.outputs.level }}",
+                    "short": true,
+                    "value": "repository : ${{ github.repository }}"
+                  }
+                ]
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
