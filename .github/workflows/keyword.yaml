@@ -1,65 +1,33 @@
-name: create-repo
+ name: issue-keyword-notify
+
 on:
-  workflow_dispatch:
-    inputs:
-      prefix:
-        description: 'set repo prefix'
-        required: true
-        default: 'service'
-        type: choice
-        options:
-        - example
-        - service
-      name:
-        description: 'set repo name'
-        required: true
-        default: 'github-actions'
-        type: string
+  issues:
+    types: [opened]
 
 jobs:
-  create-repo-automation:
+  get-keyword:
     runs-on: ubuntu-latest
+    if: |
+      job level에서 contains사용 
+    outputs:
+      keyword: ${{ steps.issue-title.outputs.keyword }}
     steps:
-    - name: gh auth login
+    - name: create output
+      id: issue-title
       run: |
-        echo ${{ secrets.PERSONAL_ACCESS_TOKEN }} | gh auth login --with-token
-    - name: create-repo
-      id: create-repo
-      run: |
-        gh repo create sangwon-action/${{ inputs.prefix }}-${{ inputs.name }} --public --add-readme
+        # 키워드가 critical -> output: critical
+        # 키워드가 normal -> output: normal
+
+  slack:
+    needs: [get-keyword]
+    runs-on: ubuntu-latest
+    environment: keyword
+    steps:
     - name: slack 
-      if: keyword == 'critical'
-      uses: slackapi/slack-github-action@v1.24.0
-      with:
-        payload: |
-          # 생략 
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.CRITICAL_SLACK_WEBHOOK_URL }}
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-    - name: slack 
-      if: keyword == 'normal'
       uses: slackapi/slack-github-action@v1.24.0
       with:
         payload: |
           # 생략
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.NORMAL_SLACK_WEBHOOK_URL }}
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-    - name: slack 
-      if: keyword == 'low'
-      uses: slackapi/slack-github-action@v1.24.0
-      with:
-        payload: |
-          # 생략
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.LOW_SLACK_WEBHOOK_URL }}
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-    - name: slack 
-      if: keyword == 'high'
-      uses: slackapi/slack-github-action@v1.24.0
-      with:
-        payload: |
-          # 생략
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.HIGH_SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
