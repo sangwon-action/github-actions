@@ -1,0 +1,16 @@
+name: create-repo
+on: 
+  workflow_dispatch:
+    prefix:
+      description: 'set repo prefix'
+      required: true
+      default: 'service'
+      type: choice
+      options:
+      - example
+      - service
+    name:
+      description: 'set repo name'
+      required: true
+      default: 'github-actions'
+      type: string
