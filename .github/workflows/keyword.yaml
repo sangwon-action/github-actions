@@ -43,7 +43,7 @@ jobs:
           {
             "attachments": [
               {
-                "pretext": "slack message",
+                "pretext": "issue alert message",
                 "color": "28a745",
                 "fields": [
                   {
