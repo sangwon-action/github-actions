@@ -33,7 +33,6 @@ jobs:
         with:
           payload: |
             {
-              "text": "create repository",
               "attachments": [
                 {
                   "pretext": "create repo result",
