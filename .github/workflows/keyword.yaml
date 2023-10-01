@@ -10,7 +10,7 @@ jobs:
     outputs:
       level: ${{ steps.get-keyword.outputs.level }}
     steps:
-    - name: use checkout action
+    - name: checkout
       uses: actions/checkout@v4
     - name: get keyword
       id: get-keyword
@@ -25,16 +25,19 @@ jobs:
             echo level=$keyword >> $GITHUB_OUTPUT
           fi
         done
+    - name: get output  
+      run: |
+        echo ${{ steps.get-keyword.outputs.level }}
 
 
   slack:
     needs: [get-keyword]
     if: needs.get-keyword.outputs.level != 'Undefined'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: ["${{ needs.get-keyword.outputs.level }}"]
-    environment: ${{ matrix.environment }}
+    # strategy:
+    #   matrix:
+    #     environment: ["${{ needs.get-keyword.outputs.level }}"]
+    environment: ${{ needs.get-keyword.outputs.level }} # ${{ matrix.environment }}
     steps:
     - name: slack 
       uses: slackapi/slack-github-action@v1.24.0
