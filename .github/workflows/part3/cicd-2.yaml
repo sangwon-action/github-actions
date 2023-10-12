@@ -39,9 +39,9 @@ jobs:
     - name: checkout the code
       uses: actions/checkout@v3
       # 생략
-  deploy-master:
+  deploy-prod:
     runs-on: ubuntu-latest
-    needs: [ image-build-master ]
+    needs: [ image-build-prod ]
     steps:
     - name: checkout the code
       uses: actions/checkout@v3
