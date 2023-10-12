@@ -46,3 +46,27 @@ jobs:
     - name: checkout the code
       uses: actions/checkout@v3
       # 생략
+  
+  image-build:
+    if: github.event.pull_request.merged == true 
+    strategy:
+      matrix:
+        environment: ["${{ needs.job-name.outputs.output-name }}"]
+    environment: ${{ matrix.environment }}
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+    - name: checkout the code
+      uses: actions/checkout@v3
+      # 생략
+  deploy:
+    strategy:
+      matrix:
+        environment: ["${{ needs.job-name.outputs.output-name }}"]
+    environment: ${{ matrix.environment }}
+    runs-on: ubuntu-latest
+    needs: [ image-build ]
+    steps:
+    - name: checkout the code
+      uses: actions/checkout@v3
+      # 생략
