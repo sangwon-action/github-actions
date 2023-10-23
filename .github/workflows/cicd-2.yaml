@@ -1,4 +1,4 @@
-name: cicd-1
+name: cicd-2
 on:
   pull_request:
     types: [opened, synchronize, closed]
@@ -147,7 +147,7 @@ jobs:
       uses: actions/checkout@v4
     - name: gh auth login
       run: |
-        echo ${{ secrets.PERSONAL_ACCESS_TOKEN }} || gh auth login --with-token
+        echo ${{ secrets.PERSONAL_ACCESS_TOKEN }} | gh auth login --with-token
     - name: create branch
       run: |
         git checkout -b release/${{ github.run_id }}
