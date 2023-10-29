@@ -3,7 +3,6 @@ on: push
 
 jobs:
   error-test:
-    steps:
     - name: use checkout action
       uses: actions/checkout@v4
   
