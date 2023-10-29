@@ -1,0 +1,10 @@
+name: checkout
+on: push
+
+jobs:
+  error-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: use checkout action
+      uses: actions/checkout@v4
+  
