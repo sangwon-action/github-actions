@@ -1,8 +1,0 @@
-name: checkout
-on: push
-
-jobs:
-  error-test:
-    - name: use checkout action
-      uses: actions/checkout@v4
-  
