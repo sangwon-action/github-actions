@@ -1,4 +1,4 @@
-name: cicd-3
+name: cicd-4
 on:
   push:
     paths:
@@ -55,7 +55,7 @@ jobs:
         if [[ ${{ github.ref_type }} == "branch" ]]; then
           echo "environment=dev" >> $GITHUB_OUTPUT
           if [[ ${{ github.base_ref }} == "master" ]]; then
-            echo "environment=prod" >> $GITHUB_OUTPUT 
+            echo "environment=staging" >> $GITHUB_OUTPUT 
           fi
         fi
     - name: check env
@@ -166,4 +166,70 @@ jobs:
       run: |
         gh pr create --base master --head release/${{ github.ref_name }} --title "release/${{ github.ref_name }} -> master" --body "release pr"
 
+  approve:
+    if: needs.set-environment.outputs.environment == 'staging'
+    runs-on: ubuntu-latest
+    environment: approve-process
+    needs: [set-environment, deploy]
+    steps:
+    - name: approve
+      run: |
+        echo "Approve Done"
+
+  prod-deploy:
+    runs-on: ubuntu-latest
+    needs: [ approve ]
+    permissions:
+      id-token: write
+      contents: read
+    strategy:
+      matrix:
+        environment: ["prod"]
+    environment: ${{ matrix.environment }}  
+    steps:
+    - name: checkout the code
+      uses: actions/checkout@v4
+    - name: Configure AWS Credentials
+      id: credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ vars.AWS_REGION }}
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+    - name: setup kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: latest
+    - name: setup helm
+      uses: azure/setup-helm@v3
+      with:
+        version: v3.11.1
+    - name: access kubernetes
+      run: |
+        aws eks update-kubeconfig --name ${{ vars.CLUSTER_NAME }}
+    - name: deploy
+      id: status
+      run: |
+        helm upgrade --install my-app kubernetes/my-app --create-namespace --namespace my-app-${{ vars.SUFFIX }} \
+        --set image.tag=${{ github.sha }} \
+        --set image.repository=${{ secrets.REGISTRY }}/${{ vars.REPOSITORY }}
+    - name: notify
+      if: always()
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "message",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Environment : ${{ matrix.environment }}, Deploy Result : ${{ steps.status.outcome }}, Repository : ${{ github.repository }}."
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
