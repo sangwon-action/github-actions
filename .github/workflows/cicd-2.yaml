@@ -51,7 +51,6 @@ jobs:
     - name: check env
       run: echo ${{ steps.set-env.outputs.environment }}
 
-
   image-build:
     runs-on: ubuntu-latest
     needs: [set-environment]
