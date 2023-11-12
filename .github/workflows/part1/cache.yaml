@@ -29,6 +29,3 @@ jobs:
       run: |
         cd my-app
         npm run build
-    - name: get path
-      run: |
-        echo ${{ steps.npm-cache-dir.outputs.dir }}
