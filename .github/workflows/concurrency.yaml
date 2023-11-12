@@ -1,4 +1,4 @@
-name: Concurrency 
+name: Concurrency 2
 on: push
 
 concurrency: 
